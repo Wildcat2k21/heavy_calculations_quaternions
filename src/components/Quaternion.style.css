@@ -1,0 +1,33 @@
+.controls__params{
+    display: flex;
+    flex-direction: column;
+}
+
+.rot-q-unit {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border:  2.5px solid rgb(141, 141, 141);
+}
+
+.rot-q-unit--angle, .rot-q-unit--unit {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0px 0px 15px 0px;
+}
+
+.rot-q-unit--unit {
+    justify-content: center;
+}
+
+.control--number {
+    width: 45px;
+}
+
+.control-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 10px 0px 10px;
+}

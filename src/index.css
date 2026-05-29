@@ -1,0 +1,8 @@
+#app {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-end;
+
+    flex-wrap: wrap;
+}

@@ -1,0 +1,14 @@
+.sketch {
+    display: flex;
+    flex-direction: row;
+    /* width: 1000px; */
+}
+
+.panel {
+    overflow-y: auto;
+    height: 800px;
+}
+
+.method-info{
+    width: 500px;
+}
