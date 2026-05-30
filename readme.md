@@ -29,9 +29,16 @@
 
 ---
 
+## Справка по расчетам
+
+![Quaternion Calc](./public/quat.png)
+
 ## 🖼 Демонстрация
 
-![Quaternion Visualization](./public/quat.png)
+![Quaternion Visualization](./public/app1.png)
+
+![Quaternion Visualization](./public/app2.png)
+
 > *Слева: вращение через кватернионы. Справа: через матрицы поворота. Управление параметрами в реальном времени.*
 
 ---
