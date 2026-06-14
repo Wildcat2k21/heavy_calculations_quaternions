@@ -1,0 +1,15 @@
+{
+  "name": "rotation-core",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "rotation_core_bg.wasm",
+    "rotation_core.js",
+    "rotation_core.d.ts"
+  ],
+  "main": "rotation_core.js",
+  "types": "rotation_core.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
