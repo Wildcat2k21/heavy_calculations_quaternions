@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 470" font-family="'Segoe UI',Roboto,Arial,sans-serif">
+<rect width="780" height="470" fill="#ffffff"/>
+<text x="390" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#222">Среднее время кадра (compute)</text><text x="390" y="50" text-anchor="middle" font-size="13" fill="#666">model.h.json · 326 786 вершин · меньше — лучше</text>
+<line x1="66" y1="406" x2="580" y2="406" stroke="#e6e6e6"/>
+<text x="58" y="410" text-anchor="end" font-size="11" fill="#666">0.00</text>
+<line x1="66" y1="337.6" x2="580" y2="337.6" stroke="#e6e6e6"/>
+<text x="58" y="341.6" text-anchor="end" font-size="11" fill="#666">0.34</text>
+<line x1="66" y1="269.2" x2="580" y2="269.2" stroke="#e6e6e6"/>
+<text x="58" y="273.2" text-anchor="end" font-size="11" fill="#666">0.69</text>
+<line x1="66" y1="200.8" x2="580" y2="200.8" stroke="#e6e6e6"/>
+<text x="58" y="204.8" text-anchor="end" font-size="11" fill="#666">1.03</text>
+<line x1="66" y1="132.39999999999998" x2="580" y2="132.39999999999998" stroke="#e6e6e6"/>
+<text x="58" y="136.39999999999998" text-anchor="end" font-size="11" fill="#666">1.38</text>
+<line x1="66" y1="64" x2="580" y2="64" stroke="#e6e6e6"/>
+<text x="58" y="68" text-anchor="end" font-size="11" fill="#666">1.72</text>
+<text x="16" y="235" transform="rotate(-90 16 235)" text-anchor="middle" font-size="12" fill="#666">Время кадра, мс</text>
+<rect x="108.83333333333334" y="173.7385651265382" width="85.66666666666667" height="232.2614348734618" fill="#7c3aed" rx="2"/>
+<text x="151.66666666666669" y="167.7385651265382" text-anchor="middle" font-size="11.5" font-weight="700" fill="#222">1.17</text>
+<rect x="194.5" y="116.16949152542372" width="85.66666666666667" height="289.8305084745763" fill="#d97706" rx="2"/>
+<text x="237.33333333333334" y="110.16949152542372" text-anchor="middle" font-size="11.5" font-weight="700" fill="#222">1.46</text>
+<text x="194.5" y="428" text-anchor="middle" font-size="13" fill="#222">Кватернион</text>
+<rect x="365.8333333333333" y="243.21848154167634" width="85.66666666666667" height="162.78151845832366" fill="#7c3aed" rx="2"/>
+<text x="408.66666666666663" y="237.21848154167634" text-anchor="middle" font-size="11.5" font-weight="700" fill="#222">0.82</text>
+<rect x="451.5" y="151.90201996749477" width="85.66666666666667" height="254.09798003250523" fill="#d97706" rx="2"/>
+<text x="494.3333333333333" y="145.90201996749477" text-anchor="middle" font-size="11.5" font-weight="700" fill="#222">1.28</text>
+<text x="451.5" y="428" text-anchor="middle" font-size="13" fill="#222">Матрица</text>
+<line x1="66" y1="406" x2="580" y2="406" stroke="#333"/>
+<line x1="66" y1="64" x2="66" y2="406" stroke="#333"/>
+<rect x="604" y="64" width="14" height="14" rx="2" fill="#7c3aed"/><text x="624" y="76" font-size="13" fill="#222">WASM</text><rect x="604" y="86" width="14" height="14" rx="2" fill="#d97706"/><text x="624" y="98" font-size="13" fill="#222">JS</text>
+</svg>

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 480" font-family="'Segoe UI',Roboto,Arial,sans-serif">
+<rect width="820" height="480" fill="#ffffff"/>
+<text x="410" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#222">Потенциал WASM: запас геометрии при реальном времени</text><text x="410" y="50" text-anchor="middle" font-size="13" fill="#666">экстраполяция удельной стоимости на крупные сцены · ниже линии бюджета = укладываемся в FPS</text>
+<line x1="70" y1="414" x2="610" y2="414" stroke="#e6e6e6"/>
+<text x="62" y="418" text-anchor="end" font-size="11" fill="#666">0</text>
+<line x1="70" y1="344" x2="610" y2="344" stroke="#e6e6e6"/>
+<text x="62" y="348" text-anchor="end" font-size="11" fill="#666">9</text>
+<line x1="70" y1="274" x2="610" y2="274" stroke="#e6e6e6"/>
+<text x="62" y="278" text-anchor="end" font-size="11" fill="#666">18</text>
+<line x1="70" y1="204" x2="610" y2="204" stroke="#e6e6e6"/>
+<text x="62" y="208" text-anchor="end" font-size="11" fill="#666">27</text>
+<line x1="70" y1="134" x2="610" y2="134" stroke="#e6e6e6"/>
+<text x="62" y="138" text-anchor="end" font-size="11" fill="#666">36</text>
+<line x1="70" y1="64" x2="610" y2="64" stroke="#e6e6e6"/>
+<text x="62" y="68" text-anchor="end" font-size="11" fill="#666">45</text>
+<line x1="70" y1="414" x2="70" y2="64" stroke="#e6e6e6"/>
+<text x="70" y="434" text-anchor="middle" font-size="11" fill="#666">0M</text>
+<line x1="178" y1="414" x2="178" y2="64" stroke="#e6e6e6"/>
+<text x="178" y="434" text-anchor="middle" font-size="11" fill="#666">2M</text>
+<line x1="286" y1="414" x2="286" y2="64" stroke="#e6e6e6"/>
+<text x="286" y="434" text-anchor="middle" font-size="11" fill="#666">4M</text>
+<line x1="394" y1="414" x2="394" y2="64" stroke="#e6e6e6"/>
+<text x="394" y="434" text-anchor="middle" font-size="11" fill="#666">6M</text>
+<line x1="502" y1="414" x2="502" y2="64" stroke="#e6e6e6"/>
+<text x="502" y="434" text-anchor="middle" font-size="11" fill="#666">8M</text>
+<line x1="610" y1="414" x2="610" y2="64" stroke="#e6e6e6"/>
+<text x="610" y="434" text-anchor="middle" font-size="11" fill="#666">10M</text>
+<text x="340" y="466" text-anchor="middle" font-size="12" fill="#666">Число вершин (экстраполяция)</text>
+<text x="16" y="239" transform="rotate(-90 16 239)" text-anchor="middle" font-size="12" fill="#666">Прогноз времени кадра, мс</text>
+<line x1="70" y1="284.3703703703703" x2="610" y2="284.3703703703703" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="606" y="278.3703703703703" text-anchor="end" font-size="11" font-weight="700" fill="#dc2626">бюджет 60 FPS (16.7 мс)</text>
+<line x1="70" y1="349.18518518518516" x2="610" y2="349.18518518518516" stroke="#0ea5e9" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="606" y="343.18518518518516" text-anchor="end" font-size="11" font-weight="700" fill="#0ea5e9">бюджет 120 FPS (8.3 мс)</text>
+<polyline points="70,414 610,135.5302981155864" fill="none" stroke="#7c3aed" stroke-width="2.5" />
+<polyline points="70,414 610,66.50789337500515" fill="none" stroke="#d97706" stroke-width="2.5" />
+<polyline points="70,414 610,218.83320038870153" fill="none" stroke="#a78bfa" stroke-width="2.5" />
+<polyline points="70,414 610,109.34938597260725" fill="none" stroke="#fbbf24" stroke-width="2.5" />
+<circle cx="428.6675609756098" cy="284.3703703703703" r="4" fill="#a78bfa" stroke="#fff" stroke-width="1.5"/>
+<text x="428.6675609756098" y="276.3703703703703" text-anchor="middle" font-size="11" font-weight="700" fill="#a78bfa">6.6M</text>
+<circle cx="321.37384615384616" cy="284.3703703703703" r="4" fill="#7c3aed" stroke="#fff" stroke-width="1.5"/>
+<text x="321.37384615384616" y="302.3703703703703" text-anchor="middle" font-size="11" font-weight="700" fill="#7c3aed">4.7M</text>
+<circle cx="299.7714062499999" cy="284.3703703703703" r="4" fill="#fbbf24" stroke="#fff" stroke-width="1.5"/>
+<text x="299.7714062499999" y="276.3703703703703" text-anchor="middle" font-size="11" font-weight="700" fill="#fbbf24">4.3M</text>
+<circle cx="271.44342465753425" cy="284.3703703703703" r="4" fill="#d97706" stroke="#fff" stroke-width="1.5"/>
+<text x="271.44342465753425" y="302.3703703703703" text-anchor="middle" font-size="11" font-weight="700" fill="#d97706">3.7M</text>
+<line x1="70" y1="414" x2="610" y2="414" stroke="#333"/>
+<line x1="70" y1="64" x2="70" y2="414" stroke="#333"/>
+<rect x="632" y="62" width="14" height="14" rx="2" fill="#7c3aed"/><text x="652" y="74" font-size="13" fill="#222">WASM · Кватернион</text><rect x="632" y="84" width="14" height="14" rx="2" fill="#d97706"/><text x="652" y="96" font-size="13" fill="#222">JS · Кватернион</text><rect x="632" y="106" width="14" height="14" rx="2" fill="#a78bfa"/><text x="652" y="118" font-size="13" fill="#222">WASM · Матрица</text><rect x="632" y="128" width="14" height="14" rx="2" fill="#fbbf24"/><text x="652" y="140" font-size="13" fill="#222">JS · Матрица</text>
+</svg>

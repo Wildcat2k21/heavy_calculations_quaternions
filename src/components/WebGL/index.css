@@ -4,11 +4,142 @@
     /* width: 1000px; */
 }
 
+.main {
+    position: relative;
+}
+
 .panel {
     overflow-y: auto;
     height: 800px;
+    width: 540px;
+    padding: 0 12px;
+    box-sizing: border-box;
 }
 
 .method-info{
     width: 500px;
+}
+
+/* --- Оверлей метрик реального времени --- */
+.metrics-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    padding: 10px 14px;
+    background: rgba(20, 20, 20, 0.78);
+    color: #f2f2f2;
+    font-family: "Consolas", "Menlo", monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    border-radius: 6px;
+    pointer-events: none;
+    min-width: 150px;
+}
+
+.metrics-row b {
+    color: #6ee7ff;
+}
+
+/* --- Панель управления режимом исследования --- */
+.bench-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.bench-bar__field {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+}
+
+.engine-btn {
+    min-width: 64px;
+    padding: 5px 12px;
+    font-weight: 700;
+    color: #fff;
+    background: #7c3aed; /* WASM — фиолетовый */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.engine-btn--js {
+    background: #d97706; /* JS — оранжевый */
+}
+
+#model-select {
+    padding: 4px 6px;
+}
+
+.bench-run-btn {
+    margin-top: 8px;
+    width: 100%;
+    padding: 10px;
+    font-weight: 700;
+    color: #fff;
+    background: #0f766e;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.bench-run-btn:disabled {
+    opacity: 0.6;
+    cursor: progress;
+}
+
+/* --- Результаты бенчмарка --- */
+.bench-results {
+    margin-top: 14px;
+}
+
+.bench-status {
+    font-style: italic;
+    color: #555;
+}
+
+.bench-title {
+    margin: 6px 0;
+}
+
+.bench-meta {
+    font-size: 13px;
+    margin: 6px 0;
+}
+
+.bench-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.bench-table th,
+.bench-table td {
+    border: 1px solid #ccc;
+    padding: 5px 7px;
+    text-align: center;
+}
+
+.bench-table thead th {
+    background: #f0f0f0;
+}
+
+.bench-session {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: "Consolas", "Menlo", monospace;
+    font-size: 12px;
+    margin-top: 6px;
+    resize: vertical;
+}
+
+.bench-copy-btn {
+    margin-top: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
 }
