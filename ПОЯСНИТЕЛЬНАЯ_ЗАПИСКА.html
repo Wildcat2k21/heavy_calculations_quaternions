@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Пояснительная записка — Исследовательский стенд сравнения 3D-вращений</title>
+<style>
+  /* ====== Печать → PDF ====== */
+  @page {
+    size: A4;
+    margin: 20mm 18mm 20mm 25mm; /* увеличенное левое поле под подшивку */
+  }
+  @media print {
+    a { color: #000; text-decoration: none; }
+    .no-print { display: none; }
+    h1, h2 { page-break-after: avoid; }
+    table, figure, .formula { page-break-inside: avoid; }
+    .page-break { page-break-before: always; }
+  }
+
+  :root {
+    --accent: #7c3aed;
+    --accent2: #d97706;
+    --ink: #1a1a1a;
+    --muted: #555;
+    --line: #d9d9d9;
+  }
+
+  html { font-size: 12pt; }
+  body {
+    font-family: "Times New Roman", "Liberation Serif", Georgia, serif;
+    color: var(--ink);
+    line-height: 1.5;
+    text-align: justify;
+    margin: 0 auto;
+    max-width: 820px;
+    padding: 24px;
+    background: #fff;
+  }
+
+  /* ====== Титульный лист ====== */
+  .cover {
+    text-align: center;
+    height: 96vh;
+    display: flex;
+    flex-direction: column;
+    page-break-after: always;
+  }
+  .cover .org { font-size: 12pt; line-height: 1.4; margin-top: 8px; text-transform: uppercase; }
+  .cover .spacer-top { flex: 0 0 18%; }
+  .cover .doctype { font-size: 13pt; letter-spacing: 2px; text-transform: uppercase; margin: 6px 0; }
+  .cover .discipline { font-size: 13pt; margin-top: 28px; }
+  .cover .theme {
+    font-size: 19pt; font-weight: 700; margin: 16px auto; max-width: 90%;
+    line-height: 1.35;
+  }
+  .cover .traj { font-size: 12.5pt; color: var(--muted); margin-top: 6px; }
+  .cover .signs {
+    flex: 1 1 auto; display: flex; flex-direction: column;
+    justify-content: flex-end; align-items: flex-end; text-align: left;
+    gap: 14px; padding-right: 4%;
+  }
+  .cover .signs .row { width: 360px; }
+  .cover .signs .lbl { font-size: 11.5pt; }
+  .cover .signs .fill { display: inline-block; min-width: 150px; border-bottom: 1px solid #000; }
+  .cover .city { margin-top: 26px; font-size: 12pt; }
+
+  /* ====== Типографика ====== */
+  h1 { font-size: 17pt; margin: 26px 0 10px; line-height: 1.25; }
+  h2 { font-size: 14pt; margin: 22px 0 8px; }
+  h3 { font-size: 12.5pt; margin: 16px 0 6px; }
+  p { margin: 8px 0; }
+  ul, ol { margin: 8px 0 8px 4px; padding-left: 22px; }
+  li { margin: 4px 0; }
+  code, .mono {
+    font-family: "Consolas", "Liberation Mono", monospace;
+    font-size: 0.92em; background: #f4f2fb; padding: 0 3px; border-radius: 3px;
+  }
+
+  /* ====== Аннотация ====== */
+  .abstract {
+    border: 1px solid var(--line); border-left: 4px solid var(--accent);
+    padding: 12px 16px; margin: 14px 0; background: #faf9ff; font-size: 11.5pt;
+  }
+
+  /* ====== Оглавление ====== */
+  .toc { font-size: 12pt; }
+  .toc ol { list-style: none; padding-left: 0; counter-reset: sec; }
+  .toc > ol > li { counter-increment: sec; margin: 5px 0; font-weight: 600; }
+  .toc > ol > li::before { content: counter(sec) ". "; }
+  .toc ol ol { counter-reset: sub; padding-left: 22px; }
+  .toc ol ol li { counter-increment: sub; font-weight: 400; margin: 2px 0; }
+  .toc ol ol li::before { content: counter(sec) "." counter(sub) " "; }
+
+  /* ====== Таблицы ====== */
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 10.8pt; }
+  caption { caption-side: top; font-size: 10.8pt; color: var(--muted); text-align: left; margin-bottom: 4px; font-style: italic; }
+  th, td { border: 1px solid var(--line); padding: 5px 8px; text-align: left; vertical-align: top; }
+  thead th { background: #efeafb; font-weight: 700; }
+  tbody tr:nth-child(even) { background: #faf9fc; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .best { font-weight: 700; color: var(--accent); }
+
+  /* ====== Формулы / блоки кода ====== */
+  .formula, pre {
+    background: #f7f6fb; border: 1px solid var(--line); border-radius: 5px;
+    padding: 10px 14px; margin: 10px 0; font-family: "Consolas","Liberation Mono",monospace;
+    font-size: 10.5pt; white-space: pre; overflow-x: auto; text-align: left; line-height: 1.45;
+  }
+
+  /* ====== Рисунки ====== */
+  figure { margin: 16px 0; text-align: center; }
+  figure svg, figure img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 4px; }
+  figure img.screenshot { max-width: 86%; }
+  figcaption { font-size: 10.5pt; color: var(--muted); margin-top: 6px; font-style: italic; }
+
+  .note { background: #fff7ed; border-left: 4px solid var(--accent2); padding: 8px 14px; margin: 12px 0; font-size: 11pt; }
+
+  /* ====== Нумерация разделов на печати ====== */
+  body { counter-reset: h1c; }
+  h1.sec { counter-increment: h1c; counter-reset: h2c; }
+  h1.sec::before { content: counter(h1c) ". "; }
+  h2.sub { counter-increment: h2c; }
+  h2.sub::before { content: counter(h1c) "." counter(h2c) "  "; }
+
+  .hint {
+    margin: 18px 0; padding: 10px 14px; border: 1px dashed var(--accent);
+    background: #faf9ff; font-size: 11pt; border-radius: 6px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ ТИТУЛЬНЫЙ ЛИСТ ============ -->
+<section class="cover">
+  <div class="org">
+    Министерство науки и высшего образования Российской Федерации<br>
+    Федеральное государственное автономное образовательное учреждение<br>
+    высшего образования<br>
+    «Северо-Кавказский федеральный университет» (СКФУ)
+  </div>
+
+  <div class="spacer-top"></div>
+
+  <div class="doctype">Пояснительная записка</div>
+  <div>к курсовому проекту</div>
+
+  <div class="discipline">по дисциплине «Программная инженерия»</div>
+
+  <div class="theme">
+    Исследовательский стенд количественного сравнения моделей
+    3D-вращения (кватернионы и матрицы поворота) и движков
+    вычислений (WebAssembly/Rust и JavaScript)
+  </div>
+  <div class="traj">Траектория «Исследование»</div>
+
+  <div class="signs">
+    <div class="row">
+      <span class="lbl">Выполнил(а): студент(ка) гр. <span class="fill">&nbsp;</span></span>
+    </div>
+    <div class="row">
+      <span class="lbl"><span class="fill">&nbsp;</span> / ___________ /</span>
+    </div>
+    <div class="row" style="margin-top:18px">
+      <span class="lbl">Руководитель: <span class="fill">&nbsp;</span></span>
+    </div>
+    <div class="row">
+      <span class="lbl"><span class="fill">&nbsp;</span> / ___________ /</span>
+    </div>
+    <div class="row" style="margin-top:18px">
+      <span class="lbl">Оценка: <span class="fill">&nbsp;</span> Дата: <span class="fill" style="min-width:90px">&nbsp;</span></span>
+    </div>
+  </div>
+
+  <div class="city">Ставрополь, 2026</div>
+</section>
+
+<!-- ============ АННОТАЦИЯ ============ -->
+<h1 class="sec">Аннотация</h1>
+<div class="abstract">
+<p><strong>Тема.</strong> Интерактивный исследовательский стенд для количественного
+сравнения двух моделей 3D-вращения (кватернион и матрица поворота) и двух движков
+вычислений (нативный WebAssembly, скомпилированный из Rust, и чистый JavaScript) на
+одинаковой геометрии и идентичных алгоритмах.</p>
+
+<p><strong>Цель.</strong> Получить воспроизводимые измеримые данные, на основе которых
+можно обоснованно выбирать модель вращения и среду вычислений для задач реального
+времени в браузере.</p>
+
+<p><strong>Результат.</strong> Реализован стенд (Rust&nbsp;→&nbsp;WASM&nbsp;→&nbsp;Vite&nbsp;→&nbsp;Three.js),
+переключатель движка WASM/JS, оверлей метрик реального времени и встроенная
+бенчмарк-сессия (300&nbsp;кадров&nbsp;×&nbsp;4&nbsp;сочетания). По двум моделям (50&nbsp;970 и
+326&nbsp;786 вершин буфера) показано: WASM устойчиво быстрее JS на <strong>25–56&nbsp;%</strong> по
+среднему времени кадра при полной идентичности математического результата
+(<span class="mono">max|WASM−JS| ≈ 10⁻⁷</span>); сложность линейна по числу вершин;
+удельное преимущество WASM компаундится в запас <strong>+0,9…+2,4&nbsp;млн вершин</strong> в
+бюджете 60&nbsp;FPS.</p>
+
+<p><strong>Ключевые слова:</strong> 3D-вращение, кватернион, матрица поворота, формула
+Родрига, WebAssembly, Rust, JavaScript, Three.js, WebGL, бенчмарк, производительность,
+масштабируемость.</p>
+</div>
+
+<!-- ============ ОГЛАВЛЕНИЕ ============ -->
+<h1 class="sec">Содержание</h1>
+<nav class="toc">
+<ol>
+  <li>Введение
+    <ol>
+      <li>Проблема и актуальность</li>
+      <li>Цель, объект и предмет</li>
+      <li>Задачи</li>
+      <li>Гипотезы исследования</li>
+    </ol>
+  </li>
+  <li>Аналитический обзор
+    <ol>
+      <li>Обзор предметной области</li>
+      <li>Анализ существующих решений (аналоги)</li>
+      <li>Ниша исследовательского стенда</li>
+    </ol>
+  </li>
+  <li>Требования
+    <ol>
+      <li>Сценарии экспериментов</li>
+      <li>Функциональные требования</li>
+      <li>Нефункциональные требования</li>
+    </ol>
+  </li>
+  <li>Архитектура и математическая модель
+    <ol>
+      <li>Трёхслойная архитектура</li>
+      <li>Поток данных</li>
+      <li>Математическая модель вращений</li>
+    </ol>
+  </li>
+  <li>Реализация
+    <ol>
+      <li>Ядро на Rust и WASM-мост</li>
+      <li>JS-fallback и переключатель движка</li>
+      <li>Рендеринг и интерфейс</li>
+    </ol>
+  </li>
+  <li>Методология эксперимента</li>
+  <li>Результаты и анализ
+    <ol>
+      <li>Сводные данные</li>
+      <li>Коэффициент ускорения и корректность</li>
+      <li>Масштабируемость и деградация</li>
+      <li>Потенциал WASM</li>
+      <li>Многокритериальная оценка</li>
+    </ol>
+  </li>
+  <li>Выводы и рекомендации
+    <ol>
+      <li>Проверка гипотез</li>
+      <li>Практические рекомендации</li>
+      <li>Ограничения и направления развития</li>
+    </ol>
+  </li>
+  <li>Заключение</li>
+</ol>
+</nav>
+
+<!-- ============ 1. ВВЕДЕНИЕ ============ -->
+<h1 class="sec page-break">Введение</h1>
+
+<h2 class="sub">Проблема и актуальность</h2>
+<p>Вращение трёхмерных объектов — одна из самых частых операций в компьютерной графике,
+робототехнике, играх и симуляторах. На практике её реализуют двумя принципиально разными
+способами: <strong>матрицами поворота</strong> (Rx, Ry, Rz) — классический подход линейной
+алгебры — и <strong>кватернионами</strong> — компактным представлением, свободным от
+гимбал-лока и удобным для композиции и интерполяции вращений.</p>
+
+<p>Параллельно стоит инженерный вопрос выбора среды вычислений для веба: <strong>чистый
+JavaScript</strong> универсален, но интерпретируем/JIT-компилируем; <strong>WebAssembly
+(WASM)</strong> компилируется из Rust в близкий к нативному байткод и обещает выигрыш на
+«горячих» численных циклах. Для приложений реального времени (≥&nbsp;60&nbsp;кадров/с) при
+больших объёмах геометрии (десятки и сотни тысяч вершин) разница между этими вариантами
+может оказаться критичной. Однако в учебной литературе она обычно постулируется без
+измеримого сравнения на одинаковых алгоритмах.</p>
+
+<p>WebAssembly закрепился как стандарт ускорения вычислений в вебе, поэтому обоснованный
+выбор «WASM&nbsp;vs&nbsp;JS» — практический инженерный вопрос для любого 3D-редактора,
+CAD-вьюера или браузерного симулятора. Сравнение кватернионов и матриц — фундаментальная
+тема, и стенд даёт <strong>воспроизводимую методику замера</strong>, а не только
+теоретическое сопоставление. Результат имеет и коммерческую ценность как переиспользуемый
+компонент вращения геометрии.</p>
+
+<h2 class="sub">Цель, объект и предмет</h2>
+<p><strong>Цель работы</strong> — создать интерактивный исследовательский стенд, который на
+одной и той же геометрии и одинаковых алгоритмах позволяет количественно сравнить две
+модели вращения (кватернион vs матрицы) и два движка вычислений (WASM&nbsp;vs JS), и на
+основе измерений сделать обоснованные выводы о применимости каждого сочетания.</p>
+<ul>
+  <li><strong>Объект исследования:</strong> операция вращения массива вершин 3D-модели в
+  реальном времени в браузере.</li>
+  <li><strong>Предмет исследования:</strong> производительность, корректность и
+  масштабируемость четырёх сочетаний {модель вращения}&nbsp;×&nbsp;{движок вычислений}.</li>
+</ul>
+
+<h2 class="sub">Задачи</h2>
+<ol>
+  <li>Реализовать математическое ядро вращений на Rust и скомпилировать его в WASM.</li>
+  <li>Реализовать идентичный по алгоритму JS-fallback
+  (<code>src/math/rotations-js.js</code>).</li>
+  <li>Встроить в стенд переключатель движка <code>WASM&nbsp;/&nbsp;JS</code> и селектор модели.</li>
+  <li>Реализовать оверлей метрик реального времени (FPS, время кадра, число вершин).</li>
+  <li>Реализовать бенчмарк-сессию (300&nbsp;кадров&nbsp;×&nbsp;4&nbsp;сочетания) со сбором
+  статистики и проверкой математической корректности (<span class="mono">max|WASM−JS|</span>).</li>
+  <li>Собрать данные на двух моделях (<code>model.json</code>, <code>model.h.json</code>) и
+  оформить сравнительный анализ с выводами и рекомендациями.</li>
+</ol>
+
+<h2 class="sub">Гипотезы исследования</h2>
+<table>
+  <caption>Таблица 1.1 — Проверяемые гипотезы</caption>
+  <thead><tr><th style="width:60px">ID</th><th>Формулировка</th></tr></thead>
+  <tbody>
+    <tr><td><strong>H1</strong></td><td>Нативный WASM (Rust) даёт меньшее время вычисления кадра, чем эквивалентный чистый JavaScript, и преимущество возрастает с числом вершин.</td></tr>
+    <tr><td><strong>H2</strong></td><td>Вращение одной матрицей Rx/Ry/Rz дешевле одного поворота кватернионом на ту же вершину (меньше арифметических операций).</td></tr>
+    <tr><td><strong>H3</strong></td><td>JS-реализация даёт результат, идентичный WASM в пределах точности <code>f32</code> (расхождение порядка 10⁻⁵…10⁻⁶) — сравнивается одна и та же математика.</td></tr>
+    <tr><td><strong>H4</strong></td><td>Время кадра растёт линейно по числу вершин для всех четырёх сочетаний.</td></tr>
+    <tr><td><strong>H5</strong></td><td>На малом числе вершин накладные расходы маршалинга JS↔WASM могут нивелировать выигрыш; преимущество WASM становится явным начиная с некоторого порога N.</td></tr>
+  </tbody>
+</table>
+
+<!-- ============ 2. АНАЛИТИЧЕСКИЙ ОБЗОР ============ -->
+<h1 class="sec page-break">Аналитический обзор</h1>
+
+<h2 class="sub">Обзор предметной области</h2>
+<p>В трёхмерной графике вращение твёрдого тела представляют несколькими способами, каждый
+со своими достоинствами и недостатками.</p>
+<ul>
+  <li><strong>Углы Эйлера</strong> — три угла поворота вокруг осей. Интуитивны, но страдают
+  от гимбал-лока и зависят от порядка применения. В проекте напрямую не используются.</li>
+  <li><strong>Матрицы поворота</strong> — ортогональная матрица 3×3. Прямое применение
+  <span class="mono">v′ = R·v</span>, но избыточность (9 чисел на 3 степени свободы) и
+  накопление ошибки ортогональности при композиции.</li>
+  <li><strong>Ось-угол</strong> — единичная ось <span class="mono">û</span> и угол θ.
+  Компактно, служит базовой формой для построения кватерниона.</li>
+  <li><strong>Кватернионы</strong> — единичный кватернион
+  <span class="mono">q = (cos(θ/2), û·sin(θ/2))</span> кодирует вращение. Нет гимбал-лока,
+  компактная композиция, устойчивая нормализация, гладкая интерполяция (SLERP).</li>
+</ul>
+<p>Вращение применяется к <strong>каждой</strong> вершине <strong>каждый</strong> кадр.
+При 60&nbsp;кадрах/с и сотнях тысяч вершин это миллионы операций в секунду — типичная
+«горячая точка», на которой и проявляется разница между WASM и JS, кватернионом и матрицей.
+Именно эту разницу измеряет стенд.</p>
+
+<h2 class="sub">Анализ существующих решений (аналоги)</h2>
+<table>
+  <caption>Таблица 2.1 — Сравнение с существующими решениями</caption>
+  <thead><tr><th>Решение</th><th>Модель вращения</th><th>Движок</th><th>Открытость замеров</th></tr></thead>
+  <tbody>
+    <tr><td>Three.js</td><td>Кватернионы + матрицы</td><td>JavaScript (WASM в аддонах)</td><td>Нет встроенного сравнения</td></tr>
+    <tr><td>Babylon.js</td><td>Кватернионы + матрицы</td><td>JS; WASM для физики</td><td>Нет</td></tr>
+    <tr><td>Unity</td><td>Кватернионы</td><td>Нативный C++/C# (Burst+SIMD)</td><td>Внутренние профайлеры</td></tr>
+    <tr><td>glMatrix</td><td>Матрицы и кватернионы</td><td>Чистый JS (оптимизирован под JIT)</td><td>Микробенчмарки в репозитории</td></tr>
+    <tr><td><strong>Наш стенд</strong></td><td><strong>Кватернион и матрица, переключаемо</strong></td><td><strong>WASM и JS, переключаемо</strong></td><td><strong>Встроенная бенчмарк-сессия</strong></td></tr>
+  </tbody>
+</table>
+
+<h2 class="sub">Ниша исследовательского стенда</h2>
+<p>Готовые библиотеки фиксируют выбор движка и модели вращения и не дают встроенного
+инструмента для их сравнения на одинаковой нагрузке. Наш стенд: (1)&nbsp;реализует
+<strong>обе</strong> модели вращения и <strong>оба</strong> движка с переключением «на
+лету»; (2)&nbsp;гарантирует идентичность алгоритмов (JS-fallback — построчный аналог Rust);
+(3)&nbsp;предоставляет воспроизводимую методику замера (300&nbsp;кадров, прогрев,
+статистика, проверка корректности); (4)&nbsp;экспортирует результаты в готовый для
+оформления текстовый формат. Именно это сочетание делает работу
+<strong>исследовательской</strong>, а не очередной обёрткой над существующей библиотекой.</p>
+
+<!-- ============ 3. ТРЕБОВАНИЯ ============ -->
+<h1 class="sec page-break">Требования</h1>
+
+<h2 class="sub">Сценарии экспериментов</h2>
+<p>Единственный актор — <strong>Исследователь</strong>. Каждый сценарий описывает путь
+получения измеримого результата.</p>
+<ul>
+  <li><strong>ЭКС-1. Визуальная проверка вращения.</strong> Убедиться, что обе модели
+  вращения работают корректно: добавить кватернионное вращение «через ось r», переключиться
+  на матричное (Rx/Ry/Rz), наблюдать анимацию и стрелку оси.</li>
+  <li><strong>ЭКС-2. Переключение движка WASM↔JS.</strong> Запустить вращение, нажать
+  «Движок: WASM/JS», сравнить значение «Кадр (compute)» в оверлее — визуальный результат
+  идентичен, время кадра меняется.</li>
+  <li><strong>ЭКС-3. Замер метрик в реальном времени.</strong> Считать из оверлея движок,
+  FPS, время кадра, число вершин.</li>
+  <li><strong>ЭКС-4. Бенчмарк-сессия (ключевой сценарий).</strong> Прогон 300&nbsp;кадров
+  для 4&nbsp;сочетаний, итоговая таблица (FPS, min/max/avg), коэффициент ускорения, проверка
+  <span class="mono">max|WASM−JS|</span>, экспорт текстового отчёта.</li>
+  <li><strong>ЭКС-5. Исследование масштабируемости.</strong> Повторить ЭКС-4 на
+  <code>model.json</code> (≈51&nbsp;тыс.) и <code>model.h.json</code> (≈327&nbsp;тыс.),
+  сравнить ускорение и абсолютное время кадра.</li>
+</ul>
+
+<h2 class="sub">Функциональные требования</h2>
+<table>
+  <caption>Таблица 3.1 — Функциональные требования (все реализованы)</caption>
+  <thead><tr><th style="width:70px">ID</th><th>Требование</th><th style="width:60px">Статус</th></tr></thead>
+  <tbody>
+    <tr><td>FR-1</td><td>Загрузка 3D-модели из JSON (вершины + рёбра) с нормализацией</td><td>✅</td></tr>
+    <tr><td>FR-2</td><td>Каркасный рендеринг модели в Three.js (<code>LineSegments</code>)</td><td>✅</td></tr>
+    <tr><td>FR-3</td><td>Управление камерой мышью (вращение, зум, панорама)</td><td>✅</td></tr>
+    <tr><td>FR-4</td><td>Вращение кватернионом: добавление узлов «ось + диапазон угла», композиция</td><td>✅</td></tr>
+    <tr><td>FR-5</td><td>Вращение матрицами Rx/Ry/Rz: последовательное применение</td><td>✅</td></tr>
+    <tr><td>FR-6</td><td>Автоматическая анимация прогресса угла (bounce)</td><td>✅</td></tr>
+    <tr><td>FR-7</td><td>Визуализация оси результирующего вращения (стрелка)</td><td>✅</td></tr>
+    <tr><td>FR-8</td><td>Очистка всех вращений</td><td>✅</td></tr>
+    <tr><td>FR-9</td><td>Переключатель движка вычислений <strong>WASM / JS</strong></td><td>✅</td></tr>
+    <tr><td>FR-10</td><td>JS-fallback, алгоритмически идентичный WASM-ядру</td><td>✅</td></tr>
+    <tr><td>FR-11</td><td>Оверлей метрик: движок, FPS, время кадра, число вершин</td><td>✅</td></tr>
+    <tr><td>FR-12</td><td>Селектор модели (<code>model.json</code> / <code>model.h.json</code>)</td><td>✅</td></tr>
+    <tr><td>FR-13</td><td>Бенчмарк-сессия: 300&nbsp;кадров&nbsp;×&nbsp;4&nbsp;сочетания, прогрев, статистика</td><td>✅</td></tr>
+    <tr><td>FR-14</td><td>Проверка корректности <span class="mono">max|WASM−JS|</span></td><td>✅</td></tr>
+    <tr><td>FR-15</td><td>Экспорт результатов в текстовый формат <span class="mono">=== BENCHMARK SESSION ===</span></td><td>✅</td></tr>
+    <tr><td>FR-16</td><td>Сравнительная таблица результатов и коэффициент ускорения в UI</td><td>✅</td></tr>
+  </tbody>
+</table>
+
+<h2 class="sub">Нефункциональные требования</h2>
+<table>
+  <caption>Таблица 3.2 — Нефункциональные требования</caption>
+  <thead><tr><th style="width:70px">ID</th><th>Категория</th><th>Требование</th></tr></thead>
+  <tbody>
+    <tr><td>NFR-1</td><td>Производительность</td><td>Интерактивная работа ≥&nbsp;60&nbsp;FPS на <code>model.json</code> в режиме WASM</td></tr>
+    <tr><td>NFR-2</td><td>Производительность</td><td>Время кадра (compute) измеримо и сглажено (EMA)</td></tr>
+    <tr><td>NFR-3</td><td>Точность</td><td>Расхождение JS и WASM не превышает предела <code>f32</code> (&lt;&nbsp;10⁻³)</td></tr>
+    <tr><td>NFR-4</td><td>Воспроизводимость</td><td>Бенчмарк фиксирован: 300&nbsp;кадров, прогрев 30, единый набор сочетаний</td></tr>
+    <tr><td>NFR-5</td><td>Память</td><td>Inplace-вращение без аллокаций на кадр</td></tr>
+    <tr><td>NFR-6</td><td>Переносимость</td><td>Современный браузер с поддержкой WASM и WebGL</td></tr>
+    <tr><td>NFR-7</td><td>Развёртывание</td><td>Статическая сборка <code>npm run build</code>, без серверной части и БД</td></tr>
+    <tr><td>NFR-8</td><td>Сопровождаемость</td><td>Чёткое разделение слоёв (UI / Math-JS / Compute)</td></tr>
+    <tr><td>NFR-9</td><td>Корректность кода</td><td>Rust-ядро проходит <code>cargo clippy</code> без предупреждений</td></tr>
+  </tbody>
+</table>
+<div class="note">Проект сознательно остаётся статическим фронтендом + WASM. Отсутствие БД,
+REST и контейнеров — не недоработка, а архитектурное решение, продиктованное
+исследовательским характером задачи (траектория «Исследование»).</div>
+
+<!-- ============ 4. АРХИТЕКТУРА ============ -->
+<h1 class="sec page-break">Архитектура и математическая модель</h1>
+
+<h2 class="sub">Трёхслойная архитектура</h2>
+<p>Проект построен как трёхслойная вычислительно-визуальная система; слои разделены по
+ответственности и направлению потока данных.</p>
+<pre>┌─────────────────────────────────────────────────────────────┐
+│  Presentation Layer (UI / визуализация)                     │
+│  • Vite + кастомный Component (src/utils/Component.js)      │
+│  • Three.js Canvas, OrbitControls                          │
+│  • Панель управления, переключатель движка, селектор модели │
+│  • Оверлей метрик, бенчмарк-сессия                         │
+├─────────────────────────────────────────────────────────────┤
+│  Math-JS Layer (координация и состояние)                    │
+│  • buildResultQuaternion() — композиция кватернионов       │
+│  • quatToAxisAngle()       — извлечение оси и угла        │
+│  • updateUnits()           — анимация прогресса           │
+│  • normalizeModel()        — подготовка геометрии          │
+├─────────────────────────────────────────────────────────────┤
+│  Compute Layer (движки вычислений, переключаемо)            │
+│  rotate_vertices_axis_angle_inplace   [WASM | JS]          │
+│  rot_by_rotmat_inplace                [WASM | JS]          │
+│  rotation-core/src/lib.rs   ←→   src/math/rotations-js.js  │
+└─────────────────────────────────────────────────────────────┘
+                              ↕
+                  Float32Array (общий буфер вершин)
+                              ↕
+              THREE.BufferGeometry → GPU → WebGL</pre>
+<p>Ключевой архитектурный приём — <strong>«единая точка переключения»</strong>: в
+<code>WebGL/index.js</code> введены диспетчеры <code>rotateQuat()</code> и
+<code>rotateMat()</code>, скрывающие выбор движка. Остальной код (анимация, метрики,
+бенчмарк) не зависит от того, какой движок активен — поэтому сравнение остаётся честным.</p>
+
+<h2 class="sub">Поток данных</h2>
+<p>При загрузке модель нормализуется и разворачивается в плоский эталонный массив
+<code>baseVertices&nbsp;: Float32Array</code> вида <span class="mono">[x₁,y₁,z₁,
+x₂,y₂,z₂, …]</span>. Каждый кадр рабочий буфер <code>workingVertices</code> сбрасывается к
+эталону и поворачивается заново — это исключает накопление ошибки между кадрами.
+Измеряется <strong>только</strong> блок вращения:</p>
+<pre>workingVertices.set(baseVertices);     // сброс к эталону (вне замера)
+const t0 = performance.now();
+rotateQuat() / rotateMat();            // ← измеряемый блок (WASM или JS)
+dt = performance.now() - t0;
+positionAttr.array.set(working);       // push на GPU (вне замера)
+positionAttr.needsUpdate = true;</pre>
+<p>Сброс буфера и передача на GPU — общие для обоих движков и в замер не входят. При
+WASM-вызове <code>Float32Array</code> копируется в линейную память WASM и обратно (через
+<code>wasm-bindgen</code>); этот накладной расход — часть честной цены WASM и включён в
+измеряемый блок.</p>
+
+<h2 class="sub">Математическая модель вращений</h2>
+<h3>Кватернионная модель</h3>
+<p>Дана ось <span class="mono">a</span> и угол θ. Ось нормируется, строится единичный
+кватернион, поворот вектора выполняется по эквивалентной формуле Родрига (меньше операций,
+та же суть). Пусть <span class="mono">u = (qₓ, q_y, q_z)</span>:</p>
+<div class="formula">|a| = √(aₓ² + a_y² + a_z²),     û = a / |a|
+q = ( cos(θ/2),  ûₓ·sin(θ/2),  û_y·sin(θ/2),  û_z·sin(θ/2) )
+
+uv  = u × v
+uuv = u × (u × v)
+v′  = v + 2·( q_w·uv + uuv )</div>
+<p>Узлы вращения объединяются произведением кватернионов
+(<code>buildResultQuaternion()</code>), результат переводится обратно в ось-угол
+(<code>quatToAxisAngle()</code>) и применяется к вершинам единым вызовом ядра. Стоимость —
+≈&nbsp;15–20 арифметических операций на вершину.</p>
+
+<h3>Матричная модель</h3>
+<p>Поворот вокруг одной координатной оси. При <span class="mono">c = cosθ, s = sinθ</span>:</p>
+<div class="formula">Rx:  x′ = x          Ry:  x′ = x·c + z·s     Rz:  x′ = x·c − y·s
+     y′ = y·c − z·s       y′ = y                y′ = x·s + y·c
+     z′ = y·s + z·c       z′ = −x·s + z·c       z′ = z</div>
+<p>Стоимость — 4&nbsp;умножения + 2&nbsp;сложения на вершину (синус/косинус считаются один
+раз на вызов), то есть заметно дешевле кватерниона. Обе модели реализованы идентично в Rust
+(<code>rotation-core/src/lib.rs</code>) и JS (<code>src/math/rotations-js.js</code>).</p>
+
+<table>
+  <caption>Таблица 4.1 — Сопоставление моделей вращения</caption>
+  <thead><tr><th>Критерий</th><th>Кватернион</th><th>Матрица Rx/Ry/Rz</th></tr></thead>
+  <tbody>
+    <tr><td>Операций на вершину</td><td>~15–20</td><td>~6</td></tr>
+    <tr><td>Гимбал-лок</td><td>отсутствует</td><td>возможен при композиции Эйлера</td></tr>
+    <tr><td>Композиция</td><td>произведение кватернионов</td><td>произведение матриц</td></tr>
+    <tr><td>Накопление ошибки</td><td>мала (нормировка)</td><td>требует реортогонализации</td></tr>
+    <tr><td>Интерполяция</td><td>SLERP (гладкая)</td><td>сложнее</td></tr>
+    <tr><td>Память</td><td>4 числа</td><td>9 чисел</td></tr>
+  </tbody>
+</table>
+<p><strong>Точность f32 против f64.</strong> Rust-ядро выполняет операции в
+<code>f32</code>; JS — в <code>f64</code>, но результат усекается до <code>f32</code> при
+записи в <code>Float32Array</code>. Поэтому расхождение результатов лежит на уровне
+округления <code>f32</code>, что подтверждает идентичность моделей (гипотеза H3).</p>
+
+<!-- ============ 5. РЕАЛИЗАЦИЯ ============ -->
+<h1 class="sec page-break">Реализация</h1>
+
+<h2 class="sub">Ядро на Rust и WASM-мост</h2>
+<p>Математическое ядро реализовано на чистом Rust и скомпилировано в WebAssembly через
+<code>wasm-pack build --target web</code>. Две экспортируемые функции работают
+<strong>inplace</strong> над общим буфером вершин:
+<code>rotate_vertices_axis_angle_inplace</code> (кватернион) и
+<code>rot_by_rotmat_inplace</code> (матрица Rx/Ry/Rz). Применение мутабельных ссылок
+(<code>&amp;mut</code>) и прямой записи в линейную память минимизирует аллокации и давление
+на сборщик мусора браузера.</p>
+
+<h2 class="sub">JS-fallback и переключатель движка</h2>
+<p>Для честного сравнения создан JS-fallback (<code>src/math/rotations-js.js</code>) —
+<strong>построчный</strong> аналог Rust-ядра. Функции <code>rotateVerticesAxisAngleJS</code>
+и <code>rotByRotmatJS</code> повторяют те же арифметические выражения и так же работают
+inplace над <code>Float32Array</code>. Идентичность подтверждена численно:
+<span class="mono">max|WASM−JS| ≈ 3·10⁻⁵</span> (предел точности <code>f32</code>).</p>
+<p>Выбор реализации управляется флагом <code>engineMode ∈ {'wasm','js'}</code> через
+диспетчеры — это единственное место, которое различается между режимами, поэтому именно его
+время и измеряет бенчмарк.</p>
+
+<h2 class="sub">Рендеринг и интерфейс</h2>
+<p>Модель отображается каркасом (<code>THREE.LineSegments</code> поверх
+<code>BufferGeometry</code>). Интерфейс выполнен на тонком собственном классе
+<code>Component</code> (без внешнего фреймворка) и включает панель управления узлами
+вращения, переключатель движка, селектор модели, оверлей метрик и блок бенчмарка.</p>
+
+<figure>
+  <img class="screenshot" src="public/app1.png" alt="Общий вид стенда">
+  <figcaption>Рисунок 5.1 — Общий вид стенда: каркасная модель, оси координат, панель управления</figcaption>
+</figure>
+<figure>
+  <img class="screenshot" src="public/app2.png" alt="Вращение модели">
+  <figcaption>Рисунок 5.2 — Вращение модели и стрелка оси результирующего вращения</figcaption>
+</figure>
+
+<!-- ============ 6. МЕТОДОЛОГИЯ ============ -->
+<h1 class="sec page-break">Методология эксперимента</h1>
+<p>Измеряется <strong>время блока вычисления вращения</strong> за один кадр (в
+миллисекундах) — длительность вызова функции вращения, применённой ко всем вершинам модели.
+Это единственная часть кадра, которая различается между WASM и JS. Из замера исключены сброс
+буфера, передача данных на GPU, рендеринг Three.js и работа OrbitControls.</p>
+
+<table>
+  <caption>Таблица 6.1 — Параметры бенчмарк-сессии</caption>
+  <thead><tr><th>Параметр</th><th>Значение</th></tr></thead>
+  <tbody>
+    <tr><td>Измеряемых кадров</td><td>300 на каждое сочетание</td></tr>
+    <tr><td>Прогрев (warmup)</td><td>30 кадров (не учитываются)</td></tr>
+    <tr><td>Сочетаний</td><td>4: {Кватернион, Матрица} × {WASM, JS}</td></tr>
+    <tr><td>Нагрузка кватерниона</td><td>поворот вокруг оси (1,1,1)/√3, угол свипуется 0…2π</td></tr>
+    <tr><td>Нагрузка матрицы</td><td>поворот Rx, угол свипуется 0…2π</td></tr>
+    <tr><td>Модели</td><td><code>model.json</code> (50&nbsp;970) и <code>model.h.json</code> (326&nbsp;786 верш.)</td></tr>
+    <tr><td>Инструмент</td><td><code>performance.now()</code></td></tr>
+  </tbody>
+</table>
+
+<p><strong>Зачем прогрев.</strong> Первые вызовы JS проходят интерпретацию/JIT-компиляцию,
+а кэши процессора ещё «холодные»; 30&nbsp;холостых кадров стабилизируют замер.
+<strong>Зачем свип угла.</strong> Меняющийся угол не даёт компилятору «схитрить» на
+константах и приближает нагрузку к реальной анимации. <strong>Контроль корректности.</strong>
+После замеров стенд вычисляет <span class="mono">max|WASM−JS|</span> — максимальное
+покомпонентное расхождение результата на одном кадре (угол π/3).</p>
+
+<div class="note"><strong>Ограничение измерения (квантование таймера).</strong> Firefox по
+умолчанию округляет <code>performance.now()</code> до <strong>1&nbsp;мс</strong>
+(<code>privacy.reduceTimerPrecision</code>), поэтому в собранных данных
+<span class="mono">Min&nbsp;=&nbsp;0</span> и <span class="mono">Max</span> целочисленны.
+Среднее по 300&nbsp;кадрам остаётся репрезентативным за счёт дизеринга квантования;
+относительные выводы (ускорение, линейность) устойчивы.</div>
+
+<!-- ============ 7. РЕЗУЛЬТАТЫ ============ -->
+<h1 class="sec page-break">Результаты и анализ</h1>
+<p>Данные двух бенчмарк-сессий от 23.06.2026. Окружение: Firefox&nbsp;149.0, Ubuntu&nbsp;Linux
+x86_64. 300&nbsp;кадров на сочетание, прогрев 30&nbsp;кадров.</p>
+
+<h2 class="sub">Сводные данные</h2>
+<table>
+  <caption>Таблица 7.1 — <code>model.json</code> (50&nbsp;970 вершин буфера)</caption>
+  <thead><tr><th>Метод</th><th>Движок</th><th class="num">Ср. FPS</th><th class="num">Min, мс</th><th class="num">Max, мс</th><th class="num">Avg, мс</th></tr></thead>
+  <tbody>
+    <tr><td>Кватернион</td><td>WASM</td><td class="num">5454,5</td><td class="num">0,000</td><td class="num">2,000</td><td class="num best">0,183</td></tr>
+    <tr><td>Кватернион</td><td>JS</td><td class="num">4225,4</td><td class="num">0,000</td><td class="num">2,000</td><td class="num">0,237</td></tr>
+    <tr><td>Матрица</td><td>WASM</td><td class="num">6521,7</td><td class="num">0,000</td><td class="num">1,000</td><td class="num best">0,153</td></tr>
+    <tr><td>Матрица</td><td>JS</td><td class="num">4918,0</td><td class="num">0,000</td><td class="num">1,000</td><td class="num">0,203</td></tr>
+  </tbody>
+</table>
+<table>
+  <caption>Таблица 7.2 — <code>model.h.json</code> (326&nbsp;786 вершин буфера)</caption>
+  <thead><tr><th>Метод</th><th>Движок</th><th class="num">Ср. FPS</th><th class="num">Min, мс</th><th class="num">Max, мс</th><th class="num">Avg, мс</th></tr></thead>
+  <tbody>
+    <tr><td>Кватернион</td><td>WASM</td><td class="num">854,7</td><td class="num">0,000</td><td class="num">2,000</td><td class="num best">1,170</td></tr>
+    <tr><td>Кватернион</td><td>JS</td><td class="num">684,9</td><td class="num">0,000</td><td class="num">3,000</td><td class="num">1,460</td></tr>
+    <tr><td>Матрица</td><td>WASM</td><td class="num">1219,5</td><td class="num">0,000</td><td class="num">2,000</td><td class="num best">0,820</td></tr>
+    <tr><td>Матрица</td><td>JS</td><td class="num">781,3</td><td class="num">0,000</td><td class="num">3,000</td><td class="num">1,280</td></tr>
+  </tbody>
+</table>
+
+<figure><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 470" font-family="'Segoe UI',Roboto,Arial,sans-serif">
+<rect width="780" height="470" fill="#ffffff"/>
+<text x="390" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#222">Среднее время кадра (compute)</text><text x="390" y="50" text-anchor="middle" font-size="13" fill="#666">model.h.json · 326 786 вершин · меньше — лучше</text>
+<line x1="66" y1="406" x2="580" y2="406" stroke="#e6e6e6"/>
+<text x="58" y="410" text-anchor="end" font-size="11" fill="#666">0.00</text>
+<line x1="66" y1="337.6" x2="580" y2="337.6" stroke="#e6e6e6"/>
+<text x="58" y="341.6" text-anchor="end" font-size="11" fill="#666">0.34</text>
+<line x1="66" y1="269.2" x2="580" y2="269.2" stroke="#e6e6e6"/>
+<text x="58" y="273.2" text-anchor="end" font-size="11" fill="#666">0.69</text>
+<line x1="66" y1="200.8" x2="580" y2="200.8" stroke="#e6e6e6"/>
+<text x="58" y="204.8" text-anchor="end" font-size="11" fill="#666">1.03</text>
+<line x1="66" y1="132.39999999999998" x2="580" y2="132.39999999999998" stroke="#e6e6e6"/>
+<text x="58" y="136.39999999999998" text-anchor="end" font-size="11" fill="#666">1.38</text>
+<line x1="66" y1="64" x2="580" y2="64" stroke="#e6e6e6"/>
+<text x="58" y="68" text-anchor="end" font-size="11" fill="#666">1.72</text>
+<text x="16" y="235" transform="rotate(-90 16 235)" text-anchor="middle" font-size="12" fill="#666">Время кадра, мс</text>
+<rect x="108.83333333333334" y="173.7385651265382" width="85.66666666666667" height="232.2614348734618" fill="#7c3aed" rx="2"/>
+<text x="151.66666666666669" y="167.7385651265382" text-anchor="middle" font-size="11.5" font-weight="700" fill="#222">1.17</text>
+<rect x="194.5" y="116.16949152542372" width="85.66666666666667" height="289.8305084745763" fill="#d97706" rx="2"/>
+<text x="237.33333333333334" y="110.16949152542372" text-anchor="middle" font-size="11.5" font-weight="700" fill="#222">1.46</text>
+<text x="194.5" y="428" text-anchor="middle" font-size="13" fill="#222">Кватернион</text>
+<rect x="365.8333333333333" y="243.21848154167634" width="85.66666666666667" height="162.78151845832366" fill="#7c3aed" rx="2"/>
+<text x="408.66666666666663" y="237.21848154167634" text-anchor="middle" font-size="11.5" font-weight="700" fill="#222">0.82</text>
+<rect x="451.5" y="151.90201996749477" width="85.66666666666667" height="254.09798003250523" fill="#d97706" rx="2"/>
+<text x="494.3333333333333" y="145.90201996749477" text-anchor="middle" font-size="11.5" font-weight="700" fill="#222">1.28</text>
+<text x="451.5" y="428" text-anchor="middle" font-size="13" fill="#222">Матрица</text>
+<line x1="66" y1="406" x2="580" y2="406" stroke="#333"/>
+<line x1="66" y1="64" x2="66" y2="406" stroke="#333"/>
+<rect x="604" y="64" width="14" height="14" rx="2" fill="#7c3aed"/><text x="624" y="76" font-size="13" fill="#222">WASM</text><rect x="604" y="86" width="14" height="14" rx="2" fill="#d97706"/><text x="624" y="98" font-size="13" fill="#222">JS</text>
+</svg>
+  <figcaption>Рисунок 7.1 — Среднее время кадра (compute), детальная модель — меньше лучше</figcaption>
+</figure>
+<figure><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 470" font-family="'Segoe UI',Roboto,Arial,sans-serif">
+<rect width="780" height="470" fill="#ffffff"/>
+<text x="390" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#222">Средний FPS (потолок по compute)</text><text x="390" y="50" text-anchor="middle" font-size="13" fill="#666">model.h.json · 326 786 вершин · больше — лучше</text>
+<line x1="66" y1="406" x2="580" y2="406" stroke="#e6e6e6"/>
+<text x="58" y="410" text-anchor="end" font-size="11" fill="#666">0</text>
+<line x1="66" y1="337.6" x2="580" y2="337.6" stroke="#e6e6e6"/>
+<text x="58" y="341.6" text-anchor="end" font-size="11" fill="#666">288</text>
+<line x1="66" y1="269.2" x2="580" y2="269.2" stroke="#e6e6e6"/>
+<text x="58" y="273.2" text-anchor="end" font-size="11" fill="#666">576</text>
+<line x1="66" y1="200.8" x2="580" y2="200.8" stroke="#e6e6e6"/>
+<text x="58" y="204.8" text-anchor="end" font-size="11" fill="#666">863</text>
+<line x1="66" y1="132.39999999999998" x2="580" y2="132.39999999999998" stroke="#e6e6e6"/>
+<text x="58" y="136.39999999999998" text-anchor="end" font-size="11" fill="#666">1151</text>
+<line x1="66" y1="64" x2="580" y2="64" stroke="#e6e6e6"/>
+<text x="58" y="68" text-anchor="end" font-size="11" fill="#666">1439</text>
+<text x="16" y="235" transform="rotate(-90 16 235)" text-anchor="middle" font-size="12" fill="#666">FPS = 1000 / avg</text>
+<rect x="108.83333333333334" y="202.86909750453435" width="85.66666666666667" height="203.13090249546565" fill="#7c3aed" rx="2"/>
+<text x="151.66666666666669" y="196.86909750453435" text-anchor="middle" font-size="11.5" font-weight="700" fill="#222">855</text>
+<rect x="194.5" y="243.22434173494278" width="85.66666666666667" height="162.77565826505722" fill="#d97706" rx="2"/>
+<text x="237.33333333333334" y="237.22434173494278" text-anchor="middle" font-size="11.5" font-weight="700" fill="#222">685</text>
+<text x="194.5" y="428" text-anchor="middle" font-size="13" fill="#222">Кватернион</text>
+<rect x="365.8333333333333" y="116.16949152542372" width="85.66666666666667" height="289.8305084745763" fill="#7c3aed" rx="2"/>
+<text x="408.66666666666663" y="110.16949152542372" text-anchor="middle" font-size="11.5" font-weight="700" fill="#222">1220</text>
+<rect x="451.5" y="220.31359059353306" width="85.66666666666667" height="185.68640940646694" fill="#d97706" rx="2"/>
+<text x="494.3333333333333" y="214.31359059353306" text-anchor="middle" font-size="11.5" font-weight="700" fill="#222">781</text>
+<text x="451.5" y="428" text-anchor="middle" font-size="13" fill="#222">Матрица</text>
+<line x1="66" y1="406" x2="580" y2="406" stroke="#333"/>
+<line x1="66" y1="64" x2="66" y2="406" stroke="#333"/>
+<rect x="604" y="64" width="14" height="14" rx="2" fill="#7c3aed"/><text x="624" y="76" font-size="13" fill="#222">WASM</text><rect x="604" y="86" width="14" height="14" rx="2" fill="#d97706"/><text x="624" y="98" font-size="13" fill="#222">JS</text>
+</svg>
+  <figcaption>Рисунок 7.2 — Средний FPS (потолок по compute) — больше лучше</figcaption>
+</figure>
+
+<h2 class="sub">Коэффициент ускорения и корректность</h2>
+<table>
+  <caption>Таблица 7.3 — Ускорение WASM vs JS (Avg JS / Avg WASM)</caption>
+  <thead><tr><th>Модель вращения</th><th class="num">model.json</th><th class="num">model.h.json</th></tr></thead>
+  <tbody>
+    <tr><td>Кватернион</td><td class="num best">×1,29</td><td class="num best">×1,25</td></tr>
+    <tr><td>Матрица</td><td class="num best">×1,33</td><td class="num best">×1,56</td></tr>
+  </tbody>
+</table>
+<table>
+  <caption>Таблица 7.4 — Проверка корректности max|WASM−JS|</caption>
+  <thead><tr><th>Модель вращения</th><th class="num">model.json</th><th class="num">model.h.json</th></tr></thead>
+  <tbody>
+    <tr><td>Кватернион</td><td class="num">1,490·10⁻⁷</td><td class="num">2,384·10⁻⁷</td></tr>
+    <tr><td>Матрица</td><td class="num">5,960·10⁻⁸</td><td class="num">1,192·10⁻⁷</td></tr>
+  </tbody>
+</table>
+<p>WASM быстрее во всех сочетаниях; для матрицы преимущество растёт с числом вершин
+(×1,33&nbsp;→&nbsp;×1,56). Расхождение результатов — на уровне точности <code>f32</code>
+(≈&nbsp;10⁻⁷): движки дают идентичный результат, сравнивается одна и та же математика.</p>
+
+<h2 class="sub">Масштабируемость и деградация</h2>
+<table>
+  <caption>Таблица 7.5 — Удельная стоимость и масштабирование (рост числа вершин в 6,41×)</caption>
+  <thead><tr><th>Сочетание</th><th class="num">нс/вершину</th><th class="num">Рост времени</th><th>Близость к линейному</th></tr></thead>
+  <tbody>
+    <tr><td>WASM · Кватернион</td><td class="num">3,58</td><td class="num">×6,39</td><td>почти идеально (6,41)</td></tr>
+    <tr><td>JS · Кватернион</td><td class="num">4,47</td><td class="num">×6,16</td><td>линейно</td></tr>
+    <tr><td>WASM · Матрица</td><td class="num">2,51</td><td class="num">×5,36</td><td>сублинейно (амортизация overhead)</td></tr>
+    <tr><td>JS · Матрица</td><td class="num">3,92</td><td class="num">×6,31</td><td>линейно</td></tr>
+  </tbody>
+</table>
+<figure><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 480" font-family="'Segoe UI',Roboto,Arial,sans-serif">
+<rect width="820" height="480" fill="#ffffff"/>
+<text x="410" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#222">Деградация: время кадра vs число вершин</text><text x="410" y="50" text-anchor="middle" font-size="13" fill="#666">измеренные точки (50 970 и 326 786 вершин) — рост близок к линейному</text>
+<line x1="70" y1="414" x2="610" y2="414" stroke="#e6e6e6"/>
+<text x="62" y="418" text-anchor="end" font-size="11" fill="#666">0.00</text>
+<line x1="70" y1="326.5" x2="610" y2="326.5" stroke="#e6e6e6"/>
+<text x="62" y="330.5" text-anchor="end" font-size="11" fill="#666">0.40</text>
+<line x1="70" y1="239" x2="610" y2="239" stroke="#e6e6e6"/>
+<text x="62" y="243" text-anchor="end" font-size="11" fill="#666">0.80</text>
+<line x1="70" y1="151.5" x2="610" y2="151.5" stroke="#e6e6e6"/>
+<text x="62" y="155.5" text-anchor="end" font-size="11" fill="#666">1.20</text>
+<line x1="70" y1="64" x2="610" y2="64" stroke="#e6e6e6"/>
+<text x="62" y="68" text-anchor="end" font-size="11" fill="#666">1.60</text>
+<line x1="70" y1="414" x2="70" y2="64" stroke="#e6e6e6"/>
+<text x="70" y="434" text-anchor="middle" font-size="11" fill="#666">0k</text>
+<line x1="160" y1="414" x2="160" y2="64" stroke="#e6e6e6"/>
+<text x="160" y="434" text-anchor="middle" font-size="11" fill="#666">60k</text>
+<line x1="250" y1="414" x2="250" y2="64" stroke="#e6e6e6"/>
+<text x="250" y="434" text-anchor="middle" font-size="11" fill="#666">120k</text>
+<line x1="340" y1="414" x2="340" y2="64" stroke="#e6e6e6"/>
+<text x="340" y="434" text-anchor="middle" font-size="11" fill="#666">180k</text>
+<line x1="430" y1="414" x2="430" y2="64" stroke="#e6e6e6"/>
+<text x="430" y="434" text-anchor="middle" font-size="11" fill="#666">240k</text>
+<line x1="520" y1="414" x2="520" y2="64" stroke="#e6e6e6"/>
+<text x="520" y="434" text-anchor="middle" font-size="11" fill="#666">300k</text>
+<line x1="610" y1="414" x2="610" y2="64" stroke="#e6e6e6"/>
+<text x="610" y="434" text-anchor="middle" font-size="11" fill="#666">360k</text>
+<text x="340" y="466" text-anchor="middle" font-size="12" fill="#666">Число вершин буфера (рёбра × 2)</text>
+<text x="16" y="239" transform="rotate(-90 16 239)" text-anchor="middle" font-size="12" fill="#666">Среднее время кадра, мс</text>
+<polyline points="70,414 146.45499999999998,373.96875 560.179,158.0625" fill="none" stroke="#7c3aed" stroke-width="2.5" />
+<circle cx="146.45499999999998" cy="373.96875" r="3.5" fill="#7c3aed"/>
+<circle cx="560.179" cy="158.0625" r="3.5" fill="#7c3aed"/>
+<polyline points="70,414 146.45499999999998,362.15625 560.179,94.625" fill="none" stroke="#d97706" stroke-width="2.5" />
+<circle cx="146.45499999999998" cy="362.15625" r="3.5" fill="#d97706"/>
+<circle cx="560.179" cy="94.625" r="3.5" fill="#d97706"/>
+<polyline points="70,414 146.45499999999998,380.53125 560.179,234.625" fill="none" stroke="#a78bfa" stroke-width="2.5" />
+<circle cx="146.45499999999998" cy="380.53125" r="3.5" fill="#a78bfa"/>
+<circle cx="560.179" cy="234.625" r="3.5" fill="#a78bfa"/>
+<polyline points="70,414 146.45499999999998,369.59375 560.179,134" fill="none" stroke="#fbbf24" stroke-width="2.5" />
+<circle cx="146.45499999999998" cy="369.59375" r="3.5" fill="#fbbf24"/>
+<circle cx="560.179" cy="134" r="3.5" fill="#fbbf24"/>
+<line x1="70" y1="414" x2="610" y2="414" stroke="#333"/>
+<line x1="70" y1="64" x2="70" y2="414" stroke="#333"/>
+<rect x="632" y="62" width="14" height="14" rx="2" fill="#7c3aed"/><text x="652" y="74" font-size="13" fill="#222">WASM · Кватернион</text><rect x="632" y="84" width="14" height="14" rx="2" fill="#d97706"/><text x="652" y="96" font-size="13" fill="#222">JS · Кватернион</text><rect x="632" y="106" width="14" height="14" rx="2" fill="#a78bfa"/><text x="652" y="118" font-size="13" fill="#222">WASM · Матрица</text><rect x="632" y="128" width="14" height="14" rx="2" fill="#fbbf24"/><text x="652" y="140" font-size="13" fill="#222">JS · Матрица</text>
+</svg>
+  <figcaption>Рисунок 7.3 — Деградация: время кадра в зависимости от числа вершин</figcaption>
+</figure>
+<p>Рост времени практически совпадает с ростом числа вершин — сложность линейна по N
+(гипотеза H4 подтверждена).</p>
+
+<h2 class="sub">Потенциал WASM</h2>
+<p>Разрыв на конкретном кадре умеренный (современный JIT Firefox силён), однако
+<strong>удельное</strong> преимущество WASM по стоимости одной вершины при росте сцены
+компаундится в большой абсолютный запас геометрии в бюджете кадра реального времени.</p>
+<table>
+  <caption>Таблица 7.6 — Ёмкость сцены при реальном времени (линейная экстраполяция)</caption>
+  <thead><tr><th>Сочетание</th><th class="num">@60 FPS</th><th class="num">@120 FPS</th></tr></thead>
+  <tbody>
+    <tr><td>WASM · Матрица</td><td class="num best">6,64 млн</td><td class="num">3,32 млн</td></tr>
+    <tr><td>JS · Матрица</td><td class="num">4,26 млн</td><td class="num">2,13 млн</td></tr>
+    <tr><td>WASM · Кватернион</td><td class="num best">4,66 млн</td><td class="num">2,33 млн</td></tr>
+    <tr><td>JS · Кватернион</td><td class="num">3,73 млн</td><td class="num">1,86 млн</td></tr>
+  </tbody>
+</table>
+<figure><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 480" font-family="'Segoe UI',Roboto,Arial,sans-serif">
+<rect width="820" height="480" fill="#ffffff"/>
+<text x="410" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#222">Потенциал WASM: запас геометрии при реальном времени</text><text x="410" y="50" text-anchor="middle" font-size="13" fill="#666">экстраполяция удельной стоимости на крупные сцены · ниже линии бюджета = укладываемся в FPS</text>
+<line x1="70" y1="414" x2="610" y2="414" stroke="#e6e6e6"/>
+<text x="62" y="418" text-anchor="end" font-size="11" fill="#666">0</text>
+<line x1="70" y1="344" x2="610" y2="344" stroke="#e6e6e6"/>
+<text x="62" y="348" text-anchor="end" font-size="11" fill="#666">9</text>
+<line x1="70" y1="274" x2="610" y2="274" stroke="#e6e6e6"/>
+<text x="62" y="278" text-anchor="end" font-size="11" fill="#666">18</text>
+<line x1="70" y1="204" x2="610" y2="204" stroke="#e6e6e6"/>
+<text x="62" y="208" text-anchor="end" font-size="11" fill="#666">27</text>
+<line x1="70" y1="134" x2="610" y2="134" stroke="#e6e6e6"/>
+<text x="62" y="138" text-anchor="end" font-size="11" fill="#666">36</text>
+<line x1="70" y1="64" x2="610" y2="64" stroke="#e6e6e6"/>
+<text x="62" y="68" text-anchor="end" font-size="11" fill="#666">45</text>
+<line x1="70" y1="414" x2="70" y2="64" stroke="#e6e6e6"/>
+<text x="70" y="434" text-anchor="middle" font-size="11" fill="#666">0M</text>
+<line x1="178" y1="414" x2="178" y2="64" stroke="#e6e6e6"/>
+<text x="178" y="434" text-anchor="middle" font-size="11" fill="#666">2M</text>
+<line x1="286" y1="414" x2="286" y2="64" stroke="#e6e6e6"/>
+<text x="286" y="434" text-anchor="middle" font-size="11" fill="#666">4M</text>
+<line x1="394" y1="414" x2="394" y2="64" stroke="#e6e6e6"/>
+<text x="394" y="434" text-anchor="middle" font-size="11" fill="#666">6M</text>
+<line x1="502" y1="414" x2="502" y2="64" stroke="#e6e6e6"/>
+<text x="502" y="434" text-anchor="middle" font-size="11" fill="#666">8M</text>
+<line x1="610" y1="414" x2="610" y2="64" stroke="#e6e6e6"/>
+<text x="610" y="434" text-anchor="middle" font-size="11" fill="#666">10M</text>
+<text x="340" y="466" text-anchor="middle" font-size="12" fill="#666">Число вершин (экстраполяция)</text>
+<text x="16" y="239" transform="rotate(-90 16 239)" text-anchor="middle" font-size="12" fill="#666">Прогноз времени кадра, мс</text>
+<line x1="70" y1="284.3703703703703" x2="610" y2="284.3703703703703" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="606" y="278.3703703703703" text-anchor="end" font-size="11" font-weight="700" fill="#dc2626">бюджет 60 FPS (16.7 мс)</text>
+<line x1="70" y1="349.18518518518516" x2="610" y2="349.18518518518516" stroke="#0ea5e9" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="606" y="343.18518518518516" text-anchor="end" font-size="11" font-weight="700" fill="#0ea5e9">бюджет 120 FPS (8.3 мс)</text>
+<polyline points="70,414 610,135.5302981155864" fill="none" stroke="#7c3aed" stroke-width="2.5" />
+<polyline points="70,414 610,66.50789337500515" fill="none" stroke="#d97706" stroke-width="2.5" />
+<polyline points="70,414 610,218.83320038870153" fill="none" stroke="#a78bfa" stroke-width="2.5" />
+<polyline points="70,414 610,109.34938597260725" fill="none" stroke="#fbbf24" stroke-width="2.5" />
+<circle cx="428.6675609756098" cy="284.3703703703703" r="4" fill="#a78bfa" stroke="#fff" stroke-width="1.5"/>
+<text x="428.6675609756098" y="276.3703703703703" text-anchor="middle" font-size="11" font-weight="700" fill="#a78bfa">6.6M</text>
+<circle cx="321.37384615384616" cy="284.3703703703703" r="4" fill="#7c3aed" stroke="#fff" stroke-width="1.5"/>
+<text x="321.37384615384616" y="302.3703703703703" text-anchor="middle" font-size="11" font-weight="700" fill="#7c3aed">4.7M</text>
+<circle cx="299.7714062499999" cy="284.3703703703703" r="4" fill="#fbbf24" stroke="#fff" stroke-width="1.5"/>
+<text x="299.7714062499999" y="276.3703703703703" text-anchor="middle" font-size="11" font-weight="700" fill="#fbbf24">4.3M</text>
+<circle cx="271.44342465753425" cy="284.3703703703703" r="4" fill="#d97706" stroke="#fff" stroke-width="1.5"/>
+<text x="271.44342465753425" y="302.3703703703703" text-anchor="middle" font-size="11" font-weight="700" fill="#d97706">3.7M</text>
+<line x1="70" y1="414" x2="610" y2="414" stroke="#333"/>
+<line x1="70" y1="64" x2="70" y2="414" stroke="#333"/>
+<rect x="632" y="62" width="14" height="14" rx="2" fill="#7c3aed"/><text x="652" y="74" font-size="13" fill="#222">WASM · Кватернион</text><rect x="632" y="84" width="14" height="14" rx="2" fill="#d97706"/><text x="652" y="96" font-size="13" fill="#222">JS · Кватернион</text><rect x="632" y="106" width="14" height="14" rx="2" fill="#a78bfa"/><text x="652" y="118" font-size="13" fill="#222">WASM · Матрица</text><rect x="632" y="128" width="14" height="14" rx="2" fill="#fbbf24"/><text x="652" y="140" font-size="13" fill="#222">JS · Матрица</text>
+</svg>
+  <figcaption>Рисунок 7.4 — Потенциал WASM: запас геометрии в бюджете реального времени</figcaption>
+</figure>
+<p>На матричном вращении WASM держит реальное время на сцене, которая на
+<strong>+2,39&nbsp;млн вершин (+56&nbsp;%)</strong> крупнее, чем доступно чистому JS; для
+кватерниона запас <strong>+0,92&nbsp;млн (+25&nbsp;%)</strong>. Экстраполяция консервативна:
+реальный отрыв обычно больше — на слабых устройствах JIT менее агрессивен, WASM поддерживает
+SIMD (не задействован в текущей сборке), не зависит от деоптимизаций JIT и пауз GC, а замер
+ограничен квантованием таймера в 1&nbsp;мс.</p>
+
+<h2 class="sub">Многокритериальная оценка</h2>
+<figure><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 600" font-family="'Segoe UI',Roboto,Arial,sans-serif">
+<rect width="640" height="600" fill="#ffffff"/>
+<text x="320" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#222">Многокритериальная оценка</text><text x="320" y="50" text-anchor="middle" font-size="13" fill="#666">нормировано 0…1 (детальная модель); часть осей — качественные</text>
+<polygon points="320,270 367.5528258147577,304.54915028125265 349.38926261462365,360.45084971874735 290.61073738537635,360.45084971874735 272.4471741852423,304.54915028125265" fill="none" stroke="#e6e6e6"/>
+<polygon points="320,220 415.10565162951536,289.09830056250524 378.7785252292473,400.90169943749476 261.2214747707527,400.90169943749476 224.89434837048464,289.0983005625053" fill="none" stroke="#e6e6e6"/>
+<polygon points="320,170 462.658477444273,273.6474508437579 408.167787843871,441.3525491562421 231.83221215612906,441.3525491562421 177.34152255572695,273.6474508437579" fill="none" stroke="#e6e6e6"/>
+<polygon points="320,120 510.21130325903073,258.19660112501055 437.55705045849464,481.8033988749895 202.4429495415054,481.8033988749895 129.78869674096927,258.19660112501055" fill="none" stroke="#e6e6e6"/>
+<line x1="320" y1="320" x2="320" y2="120" stroke="#e6e6e6"/>
+<text x="320" y="92.00000000000003" text-anchor="middle" font-size="12.5" font-weight="600" fill="#222">Производительность</text>
+<line x1="320" y1="320" x2="510.21130325903073" y2="258.19660112501055" stroke="#e6e6e6"/>
+<text x="540.6451117804756" y="252.3080573050122" text-anchor="start" font-size="12.5" font-weight="600" fill="#222">Точность</text>
+<line x1="320" y1="320" x2="437.55705045849464" y2="481.8033988749895" stroke="#e6e6e6"/>
+<text x="456.36617853185373" y="511.6919426949878" text-anchor="start" font-size="12.5" font-weight="600" fill="#222">Масштабируемость</text>
+<line x1="320" y1="320" x2="202.4429495415054" y2="481.8033988749895" stroke="#e6e6e6"/>
+<text x="183.63382146814627" y="511.6919426949878" text-anchor="end" font-size="12.5" font-weight="600" fill="#222">Простота</text>
+<line x1="320" y1="320" x2="129.78869674096927" y2="258.19660112501055" stroke="#e6e6e6"/>
+<text x="99.35488821952438" y="252.30805730501226" text-anchor="end" font-size="12.5" font-weight="600" fill="#222">Стабильность</text>
+<polygon points="320,120 510.21130325903073,258.19660112501055 437.55705045849464,481.8033988749895 243.5879172019785,425.1722092687432 158.32039222982388,267.467110956259" fill="#7c3aed" fill-opacity="0.12" stroke="#7c3aed" stroke-width="2.5"/>
+<circle cx="320" cy="120" r="3" fill="#7c3aed"/>
+<circle cx="510.21130325903073" cy="258.19660112501055" r="3" fill="#7c3aed"/>
+<circle cx="437.55705045849464" cy="481.8033988749895" r="3" fill="#7c3aed"/>
+<circle cx="243.5879172019785" cy="425.1722092687432" r="3" fill="#7c3aed"/>
+<circle cx="158.32039222982388" cy="267.467110956259" r="3" fill="#7c3aed"/>
+<polygon points="320,180 510.21130325903073,258.19660112501055 418.7479223851355,455.91485505499116 255.34362224782797,408.9918693812442 148.80982706687234,264.3769410125095" fill="#a78bfa" fill-opacity="0.12" stroke="#a78bfa" stroke-width="2.5"/>
+<circle cx="320" cy="180" r="3" fill="#a78bfa"/>
+<circle cx="510.21130325903073" cy="258.19660112501055" r="3" fill="#a78bfa"/>
+<circle cx="418.7479223851355" cy="455.91485505499116" r="3" fill="#a78bfa"/>
+<circle cx="255.34362224782797" cy="408.9918693812442" r="3" fill="#a78bfa"/>
+<circle cx="148.80982706687234" cy="264.3769410125095" r="3" fill="#a78bfa"/>
+<polygon points="320,192 510.21130325903073,258.19660112501055 419.9234928897204,457.5328890437411 202.4429495415054,481.8033988749895 186.8520877186785,276.73762078750735" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="2.5"/>
+<circle cx="320" cy="192" r="3" fill="#d97706"/>
+<circle cx="510.21130325903073" cy="258.19660112501055" r="3" fill="#d97706"/>
+<circle cx="419.9234928897204" cy="457.5328890437411" r="3" fill="#d97706"/>
+<circle cx="202.4429495415054" cy="481.8033988749895" r="3" fill="#d97706"/>
+<circle cx="186.8520877186785" cy="276.73762078750735" r="3" fill="#d97706"/>
+<polygon points="320,208 510.21130325903073,258.19660112501055 422.27463389889033,460.76895702124085 220.07650711027958,457.5328890437411 196.36265288163003,279.82779073125687" fill="#fbbf24" fill-opacity="0.12" stroke="#fbbf24" stroke-width="2.5"/>
+<circle cx="320" cy="208" r="3" fill="#fbbf24"/>
+<circle cx="510.21130325903073" cy="258.19660112501055" r="3" fill="#fbbf24"/>
+<circle cx="422.27463389889033" cy="460.76895702124085" r="3" fill="#fbbf24"/>
+<circle cx="220.07650711027958" cy="457.5328890437411" r="3" fill="#fbbf24"/>
+<circle cx="196.36265288163003" cy="279.82779073125687" r="3" fill="#fbbf24"/>
+<rect x="24" y="500" width="14" height="14" rx="2" fill="#7c3aed"/><text x="44" y="512" font-size="13" fill="#222">WASM · Матрица</text><rect x="24" y="522" width="14" height="14" rx="2" fill="#a78bfa"/><text x="44" y="534" font-size="13" fill="#222">WASM · Кватернион</text><rect x="24" y="544" width="14" height="14" rx="2" fill="#d97706"/><text x="44" y="556" font-size="13" fill="#222">JS · Матрица</text><rect x="24" y="566" width="14" height="14" rx="2" fill="#fbbf24"/><text x="44" y="578" font-size="13" fill="#222">JS · Кватернион</text>
+</svg>
+  <figcaption>Рисунок 7.5 — Многокритериальная оценка четырёх сочетаний (нормировано 0…1)</figcaption>
+</figure>
+
+<!-- ============ 8. ВЫВОДЫ ============ -->
+<h1 class="sec page-break">Выводы и рекомендации</h1>
+
+<h2 class="sub">Проверка гипотез</h2>
+<table>
+  <caption>Таблица 8.1 — Итоговая проверка гипотез</caption>
+  <thead><tr><th style="width:60px">ID</th><th>Вердикт</th><th>Числовое обоснование</th></tr></thead>
+  <tbody>
+    <tr><td><strong>H1</strong></td><td>✅ / 🟡 уточнена</td><td>WASM быстрее везде (×1,25–1,56); рост с N — для матрицы (×1,33→×1,56), у кватерниона стабильно</td></tr>
+    <tr><td><strong>H2</strong></td><td>✅ подтверждена</td><td>матрица дешевле во всех 4 случаях на 12–30&nbsp;%</td></tr>
+    <tr><td><strong>H3</strong></td><td>✅ подтверждена</td><td><span class="mono">max|WASM−JS| ≈ 10⁻⁷</span> (6·10⁻⁸…2,4·10⁻⁷)</td></tr>
+    <tr><td><strong>H4</strong></td><td>✅ подтверждена</td><td>рост времени ×6,4 при росте вершин ×6,41</td></tr>
+    <tr><td><strong>H5</strong></td><td>❌ опровергнута (в диапазоне)</td><td>WASM выгоден уже при 50k вершин; порог, если есть, ниже исследованного диапазона</td></tr>
+  </tbody>
+</table>
+<p><strong>Главный вывод.</strong> Нативное WASM-ядро (Rust) устойчиво превосходит
+эквивалентный JavaScript на вращении больших массивов вершин — на 25–56&nbsp;% по среднему
+времени кадра — при полной идентичности математического результата. Наилучшее сочетание по
+скорости — <strong>WASM&nbsp;+&nbsp;матрица</strong>; наиболее универсальное по
+функциональности — <strong>WASM&nbsp;+&nbsp;кватернион</strong>.</p>
+
+<h2 class="sub">Практические рекомендации</h2>
+<ul>
+  <li><strong>WASM</strong> — для тяжёлой геометрии (10⁵–10⁷ вершин), запаса на 60/120&nbsp;FPS
+  и слабых устройств (где JIT менее агрессивен). Потенциал ещё выше при SIMD.</li>
+  <li><strong>Чистый JS</strong> — для лёгких сцен (&lt;&nbsp;50k вершин) и простоты поставки
+  без Rust-тулчейна; разрыв остаётся в пределах ~25–35&nbsp;%.</li>
+  <li><strong>Матрица</strong> — простые одноосевые повороты (дешевле); <strong>кватернион</strong>
+  — композиция, интерполяция, устойчивость к гимбал-локу.</li>
+</ul>
+
+<h2 class="sub">Ограничения и направления развития</h2>
+<ul>
+  <li><strong>Точность таймера.</strong> Firefox округляет <code>performance.now()</code> до
+  1&nbsp;мс — абсолютные значения зашумлены (средние по 300&nbsp;кадрам репрезентативны).
+  Развитие: замер в нескольких браузерах и на нескольких машинах.</li>
+  <li><strong>Диапазон моделей.</strong> Две модели; для точного графика деградации
+  добавить промежуточные (1k/5k/10k/20k вершин) и подтвердить отсутствие порога H5.</li>
+  <li><strong>SIMD / WebGPU.</strong> Перспектива: SIMD-версия WASM-ядра и сравнение с WebGPU
+  compute — ожидается кратный рост отрыва.</li>
+</ul>
+
+<!-- ============ 9. ЗАКЛЮЧЕНИЕ ============ -->
+<h1 class="sec page-break">Заключение</h1>
+<p>В рамках курсового проекта по дисциплине «Программная инженерия» (траектория
+«Исследование») разработан интерактивный стенд, который впервые в учебном контексте даёт
+<strong>воспроизводимую методику</strong> количественного сравнения моделей 3D-вращения и
+движков вычислений на идентичных алгоритмах. Все функциональные требования (FR-1…FR-16)
+реализованы; собраны и проанализированы данные двух бенчмарк-сессий.</p>
+<p>Подтверждено, что нативное WASM-ядро устойчиво быстрее эквивалентного JavaScript при
+сохранении полной математической корректности, что сложность вращения линейна по числу
+вершин, а удельное преимущество WASM компаундится в запас в миллионы вершин в бюджете
+реального времени. Результат имеет прикладную ценность как переиспользуемый компонент
+вращения геометрии для 3D-редакторов, CAD-вьюеров и браузерных симуляторов, с возможностью
+подбирать баланс «скорость&nbsp;↔&nbsp;совместимость» переключением движка.</p>
+
+<div class="hint no-print">
+  <strong>Как получить PDF из этого файла:</strong> откройте
+  <code>ПОЯСНИТЕЛЬНАЯ_ЗАПИСКА.html</code> в браузере (Chrome/Firefox) →
+  <strong>Печать</strong> (Ctrl+P) → принтер <strong>«Сохранить как PDF»</strong> →
+  поля «По умолчанию», масштаб 100&nbsp;%, включить фоновую графику →
+  сохранить как <code>ПОЯСНИТЕЛЬНАЯ_ЗАПИСКА.pdf</code>. Разрывы страниц, формулы, таблицы и
+  диаграммы уже свёрстаны под печать A4.
+</div>
+
+</body>
+</html>
